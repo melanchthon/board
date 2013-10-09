@@ -1,0 +1,1 @@
+<?phpclass Core_Comment{	public $text;	public $create_time;	public $post_id;			/*public function __construct ($post_id,$text,$create_time)	{		$this->post_id = $post_id;		$this->text = $text;		$this->create_time = $create_time;	}*/}
