@@ -2,8 +2,8 @@
 class Core_Post
 {
 	public $title;
-	public $text;
-	public $create_time;
+	public $content;
+	public $createTime;
 
 	/*public function __construct ($title,$text,$create_time)
 	{

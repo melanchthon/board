@@ -1,7 +1,7 @@
 <?php
 class Core_DbConnection 
 {
-	private static $_instance=null;
+	private static $instance=null;
 	
 	private function __construct() {}
 	private function __clone() {}
@@ -9,10 +9,12 @@ class Core_DbConnection
 	
 	static public function getInstance()
 	{
-		if (!self::$_instance) {
-			self::$_instance = new PDO("mysql:host=localhost;dbname=board",'root','pass@word1');
+		$config = Config::getDbConfig();
+		if (!self::$instance) {
+			self::$instance = new PDO("mysql:host={$config['host']};dbname={$config['name']}",$config['user'],$config['pass']);
+			self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 }
