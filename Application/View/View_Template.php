@@ -1,1 +1,1 @@
-<!doctype html><html lang="en"><head>    <meta charset="UTF-8">    <title>Программирование // доска обсуждений</title>    <link rel="stylesheet" href="css/board-style.css"/></head><body>	<?php include 'Application/View/'.$content_view; ?></body></html>
+<!doctype html><html lang="en"><head>    <meta charset="UTF-8">    <title>Программирование // доска обсуждений </title>    <link rel="stylesheet" href="css/board-style.css"/></head><body>	<?php include 'Application/View/'.$content_view; ?></body></html>
