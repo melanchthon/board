@@ -1,0 +1,1 @@
+<div class="b-pager"> 	<?php	for ($i=0;$i<=$pagesCount;$i++) {		$curr = $i;		if ($i == $currentPage){			echo "<span class='current'>{$curr}</span>";		} else {			echo "<a href='?page={$this->h($i)}'>{$curr}</a>";		}	}	?></div>
