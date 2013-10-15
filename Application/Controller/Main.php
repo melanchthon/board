@@ -24,11 +24,11 @@ class Controller_Main extends Core_Controller
 		$posts = $this->post->getPagePosts($firstPost, $postsPerPage);
 		$comments = $this->comment->getPageComments($firstPost, $postsPerPage);
 		$this->view->render('View_Main.php', 'View_Template.php',array(
-	   'posts'=>$posts,
-	   'comments'=>$comments,
-	   'pagesCount'=>$pagesCount,
-	   'currentPage'=>$currentPage,
-	   ));
+		'posts'=>$posts,
+		'comments'=>$comments,
+		'pagesCount'=>$pagesCount,
+		'currentPage'=>$currentPage,
+		));
 	}
 	
 	
