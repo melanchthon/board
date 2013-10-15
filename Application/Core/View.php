@@ -11,7 +11,7 @@ class Core_View
 	
     public function h($text) 
     {
-		return htmlspecialchars($text, ENT_QUOTES);
+        return htmlspecialchars($text, ENT_QUOTES);
     }
 	
     public function renderPartial($content_view, $data = null)
