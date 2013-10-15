@@ -9,7 +9,7 @@ class Controller_Main extends Core_Controller
 	{
 		$this->view = new Core_View();
 		$this->post = new Model_Post();
-	    $this->comment = new Model_Comment();
+		$this->comment = new Model_Comment();
 		$postsCount = $this->post->getPostsCount();
 		$postsPerPage = Config::getPostsPerPage();
 		$pagesCount = $postsCount/$postsPerPage;
