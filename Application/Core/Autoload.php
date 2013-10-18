@@ -5,7 +5,8 @@ class Core_Autoload
 	{
 		$path = explode("_",$className); 
 		$path = "Application/".implode('/',$path).'.php';
-		if(file_exists($path))
+		if(file_exists($path)) {
 			require_once($path);	
+		}
 	}
 }
