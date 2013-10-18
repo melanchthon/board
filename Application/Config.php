@@ -7,7 +7,9 @@ class Config
 	private static $dbUser = 'root';
 	private static $dbPass = 'pass@word1';
 	private static $postsPerPage = 5;
-		
+	private static $commentsOnMainPage = 3;
+	private static $profilerEnabled = true;
+	
 		
 	public static function getDbConfig()
 	{
@@ -25,7 +27,13 @@ class Config
 		return self::$postsPerPage;
 	}
 	
+	public static function getCommentsOnMainPage()
+	{
+		return self::$commentsOnMainPage;
+	}
 	
-	
-	
+	public static function isProfilerEnabled ()
+	{
+		return self::$profilerEnabled;
+	}
 }
