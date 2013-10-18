@@ -22,7 +22,9 @@ class Controller_Main extends Core_Controller
 		$firstPost = $currentPage*$postsPerPage;
 		
 		$posts = $this->post->getPagePosts($firstPost, $postsPerPage);
-		$comments = $this->comment->getPageComments($firstPost, $postsPerPage);
+		$firstPostId = $posts[0]->id; //узнаю id первого поста на текущей странице
+		$lastPostId = $posts[$postsPerPage-1]->id; //узнаю id  последнего поста на текущей странице
+		$comments = $this->comment->getPageComments($firstPostId, $lastPostId); //получаю массив всех комментариев длятекущей страницы
 		$this->view->render('View_Main.php', 'View_Template.php',array(
 		'posts'=>$posts,
 		'comments'=>$comments,
