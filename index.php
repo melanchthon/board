@@ -1,4 +1,7 @@
 <?php
 header("Content-Type: text/html;charset=utf-8");
-error_reporting(E_ALL);
+error_reporting(-1);
+
+
 require_once('Application/bootstrap.php');
+
