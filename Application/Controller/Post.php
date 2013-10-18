@@ -18,8 +18,8 @@ class Controller_Post extends Core_Controller
 			
 			$this->validate($post);
 			if (empty($this->error)){
-			$this->model->createPost($post);
-			header('Location: ../');
+				$this->model->createPost($post);
+				header('Location: ../');
 			} else {
 				$this->view->render('View_PostCreate.php','View_Template.php',array('error'=>$this->error));
 			}
