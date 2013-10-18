@@ -8,11 +8,15 @@
             <input type="text"  name="title" id="add-title" class="input-wide" value="Проблема с PHP">
             <div class="row-hint">не обязательно</div>
         </div>
-
-        <label class="row-error" for="add-text">
-            Пожалуйста, не используйте слишком сложные слова в тексте поста.
-        </label>
-        
+	
+		<?php if (isset($error)):
+			foreach ($error as $message): ?>
+			<label class="row-error" for="add-text">
+				<?=$this->h($message);?>
+			</label>
+			<?php endforeach; ?>
+        <?php endif; ?>
+		
         <div class="row">
             <div class="row-comment">Пожалуйста, не пишите здесь ничего плохого, иначе наши суровые 
                 модераторы вынуждены будут лишить вас этой возможности.</div>
