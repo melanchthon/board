@@ -1,17 +1,23 @@
 <?php
 class Model_Post extends Core_Model
 {
-	public function getAllPosts()
-	{
-		$DBH = Core_DbConnection ::getInstance();
-		$posts = $DBH->query("SELECT * FROM post ORDER BY id DESC")->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Core_Post');
-		return $posts;
-	}
+
 	
 	public function getPagePosts ($firstPost = 0,$postsPerPage = 0)
 	{
 		$DBH = Core_DbConnection::getInstance();
-		$posts = $DBH->query("SELECT * FROM post LIMIT {$firstPost},{$postsPerPage}")->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Core_Post');
+		//получаю все записи на странице и количество комментариев к ним:
+		$STH = $DBH->prepare("SELECT post.*,COUNT(comment.id)
+							AS total 
+							FROM post 
+							LEFT JOIN comment ON (post.id = comment.post_id) 
+							GROUP BY post.id O
+							RDER BY id DESC 
+							LIMIT :firstPost, :postsPerPage");
+		$STH->bindParam(":firstPost", $firstPost, PDO::PARAM_INT);
+		$STH->bindParam(":postsPerPage", $postsPerPage, PDO::PARAM_INT);
+		$STH->execute();
+		$posts = $STH->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Core_Post');
 		return $posts;
 	}
 
@@ -25,7 +31,10 @@ class Model_Post extends Core_Model
 	public function getThreadPost($thread)
 	{
 		$DBH = Core_DbConnection::getInstance();
-		$post = $DBH->query("SELECT * FROM post WHERE id={$thread}")->fetchObject('Core_Post');
+		$STH = $DBH->prepare('SELECT * FROM post WHERE id= :thread');
+		$STH->bindParam(':thread', $thread, PDO::PARAM_INT);
+		$STH->execute();
+		$post = $STH->fetchObject('Core_Post');
 		return $post;
 	}
 	
