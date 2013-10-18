@@ -1,0 +1,1 @@
+<?phpclass Core_PDOStatement extends PDOStatement{	private function __construct()	{	}		public function execute ($bound_input_params = NULL)	{		Core_Profiler::setStart();		$result  = parent::execute($bound_input_params);		Core_Profiler::setEnd();		Core_Profiler::setQuery($this->queryString);		Core_Profiler::setRows($this->rowCount());		return $result;	}}
