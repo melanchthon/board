@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Час створення: Жов 10 2013 р., 00:39
+-- Час створення: Жов 23 2013 р., 23:17
 -- Версія сервера: 5.1.65-community
 -- Версія PHP: 5.4.6
 
@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `post_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
   `content` text NOT NULL,
+  `name` varchar(128) NOT NULL DEFAULT 'anonymous',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -45,6 +46,8 @@ CREATE TABLE IF NOT EXISTS `post` (
   `create_time` int(11) NOT NULL,
   `title` varchar(128) NOT NULL,
   `content` text NOT NULL,
+  `bumped` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL DEFAULT 'Anonymous',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
