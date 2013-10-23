@@ -9,23 +9,53 @@
 
     <div class="b-threads-list">
         <div class="b-thread">
-            <div class="b-post first-post">            
-                <div class="post-number"><?=$this->h($post->id);?></div>
-                
-                <p><?=$this->h($post->content); ?></p>
-            </div>
-			
-			<?php foreach ($comments as $comment):?>
-            <div class="b-post">            
-                <div class="post-number"><?=$this->h($comment->id); ?></div>
-                
-                <p><?=$this->h($comment->content); ?></p>        
-            </div>
-			<?php endforeach; ?>
+            <?php require __DIR__.'/View_ThreadBody.php' ?>
             <div class="b-post-actions clearfix">
-                <form method="get">
-					<button class="button-action button-reply" formaction="../comment/create" name="thread" value="<?=$this->h($post->id);?>">Добавить комментарий</button>
-                </form>
+               
+			<form method = "post" action="../comment/create" class="b-in-thread-form b-big-form">
+                <div class="row row-header">
+                    <h2>Вам слово</h2>
+                    <p class="mb-0">Хотите добавить свой комментарий? 
+                    Пожалуйста, воспользуйтесь этой формой.</p>
+                </div>
+
+                <div class="row">
+					<input type="hidden" name="postId" value="<?=$this->h($_GET['thread']);?>" />
+                    <div class="row-comment">Ведите себя воспитанно. Невоспитанных ловят
+                    наши коты-модераторы.</div>
+                    <label class="row-label" for="add-text">Комментарий:</label>
+                    <textarea id="add-text" name="content" class="textarea-wide textarea-medium">Код надо писать не как 
+						попало, а аккуратно и красиво. Почему? Потому, что на неакуратно написанный 
+						код не хочется даже смотреть.
+
+						Если тебе лень выравнивать код руками, закачай его на http://beta.phpformatter.com/ и
+						нажми «format». Робот исправит выравнивание и отступы в мгновение ока. 
+
+						Самый распространенный стандарт оформления — это Zend Coding Guides 
+						(http://framework.zend.com/manual/1.12/en/coding-standard.html — на англ. яз.),
+						вот их суть:
+
+						- переменные и функции пишутся с маленькой буквы, _ не используется, 
+						используется camelCase, пример: $x, $numberOfPeople, printResults()
+						- Название функции начинается с глагола, в стиле «сделайЧтоТо»
+						- не знаешь английский? Не беда, в 21 веке есть решение этой проблемы. Не пиши транслитом,
+						открой лучше Гугл Транслейт или slovari.yandex.ru и найди название для переменной там
+						- в именах классов используется CamelCase, первая буква большая, «_» может использоваться
+						- мы предпочитаем подстановку переменных вместо конкатенации строк: "I am $age years old" —
+						хорошо, 'I am ' . $age . ' years old' — плохо 
+						- мы используем для отступов 4 пробела (можно настроить редактор, чтобы при нажатии Tab
+						он вставлял 4 пробела)
+						- скобки в for и if/else ставятся так:
+					</textarea>
+                </div>
+
+                <div class="row">            
+                    <label class="row-label" for="add-name">Ваше имя:</label>
+                    <input type="text" name="name" id="add-name" class="input-wide">
+                    <div class="row-hint">не обязательно</div>
+               </div>
+			     <button class="button-action button-main">Добавить комментарий</button>
+           </form>         
                 <a href="../" class="button-left back-link">← вернуться на главную</a>
             </div>
         </div>
