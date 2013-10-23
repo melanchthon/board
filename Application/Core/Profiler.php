@@ -1,83 +1,38 @@
 <?php
 class Core_Profiler
 {
-	public static $start = array();
-	public static $end = array();
-	public static $query = array();
-	public static $rows = array();
-	public static $scriptStart;
-	public static $scriptEnd;
+	private $dbTime = array();
+	private  $query = array();
+	private  $rows = array();
+	private  $scriptTime;
 
-	public static function setStart() 
+	
+	public function addQuery($start,$end,$query,$rows)
 	{
-		//время начала выполнения запроса к бд
-		self::$start[] = microtime(true);
+		$this->dbTime[] =  round(1000*($end - $start), 4);//время выполнения запроса к бд
+		$this->query[] = $query;//строка запроса
+		$this->rows[] = $rows;//количество строк затронутых запросом
 	}
 	
-	public static function setEnd()
+	public function setScriptTime($start,$end)
 	{
-		//время конца выполнения запроса к бд
-		self::$end[] = microtime(true);
-	}
-		
-	public static function setQuery($query)
-	{
-		//строка запроса
-		self::$query[] = $query;
+		$this->scriptTime = round(1000*($end - $start), 4); //время роботы скрипта
 	}
 	
-	public static function setRows($num)
+	public  function printTable () 
 	{
-		//количество строк, которые были затронуты в ходе выполнения  запроса
-		self::$rows[] = $num;
-	}
-	
-	public static function setScriptStart()
-	{
-		//время начала роботы скрипта
-		self::$scriptStart = microtime(true);
-	}
-	
-	public static function setScriptEnd()
-	{
-		//время конца роботы скрипта
-		self::$scriptEnd = microtime(true);
-	}
-
-	public static function getTime()
-	{
-		//время выполнения для каждого запроса к бд.
-		$time = array();
-		foreach (self::$start as $key=>$value){
-			$mcTime = self::$end[$key] - $value;//время в формате Unix
-			
-			$time[] = round(1000*$mcTime, 4); // время в миллисекундах
-		}
-		
-		return $time;
-	}
-	
-	public static function getScriptTime()
-	{
-		$time = self::$scriptEnd - self::$scriptStart;
-		return round(1000*$time, 4);
-	}
-	
-	public static function printTable () 
-	{
-		$time = self::getTime();
 		
 		echo "<table>";
 		
-		for ($i=0;$i<count(self::$query);$i++){
+		for ($i=0;$i<count($this->query);$i++){
 			echo "<tr>";
-			echo "<td>".$time[$i]." ms.<td/>";
-			echo "<td>".self::$rows[$i]."rows</td>";
-			echo "<td>".self::$query[$i]."</td>";
+			echo "<td>".$this->dbTime[$i]." ms.<td/>";
+			echo "<td>".$this->rows[$i]."rows</td>";
+			echo "<td>".$this->query[$i]."</td>";
 			echo "</tr>";
 		}
 		echo "</table>";
-		echo "Total DB:".array_sum($time)."ms, script:".self::getScriptTime()."ms. Total memory:".memory_get_usage().
-			" Peak memory:".memory_get_peak_usage();
+		echo "Total DB:".array_sum($this->dbTime)."ms, script:".$this->scriptTime."ms. Total memory:".memory_get_usage(true).
+			" Peak memory:".memory_get_peak_usage(true);
 	}
 }
