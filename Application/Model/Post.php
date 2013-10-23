@@ -11,11 +11,11 @@ class Model_Post extends Core_Model
 							AS total 
 							FROM post 
 							LEFT JOIN comment ON (post.id = comment.post_id) 
-							GROUP BY post.id O
-							RDER BY id DESC 
+							GROUP BY post.id 
+							ORDER BY bumped DESC 
 							LIMIT :firstPost, :postsPerPage");
-		$STH->bindParam(":firstPost", $firstPost, PDO::PARAM_INT);
-		$STH->bindParam(":postsPerPage", $postsPerPage, PDO::PARAM_INT);
+		$STH->bindValue(":firstPost", $firstPost, PDO::PARAM_INT);
+		$STH->bindValue(":postsPerPage", $postsPerPage, PDO::PARAM_INT);
 		$STH->execute();
 		$posts = $STH->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Core_Post');
 		return $posts;
@@ -24,7 +24,7 @@ class Model_Post extends Core_Model
 	public function createPost (Core_Post $post)
 	{
 		$DBH = Core_DbConnection::getInstance();
-		$STH = $DBH->prepare("INSERT INTO post(create_time, title, content) VALUES (:createTime, :title, :content)");
+		$STH = $DBH->prepare("INSERT INTO post(create_time, title, content, bumped, name) VALUES (:createTime, :title, :content, :bumped, :name)");
 		$STH->execute((array)$post);
 	}
 	
@@ -32,7 +32,7 @@ class Model_Post extends Core_Model
 	{
 		$DBH = Core_DbConnection::getInstance();
 		$STH = $DBH->prepare('SELECT * FROM post WHERE id= :thread');
-		$STH->bindParam(':thread', $thread, PDO::PARAM_INT);
+		$STH->bindValue(':thread', $thread, PDO::PARAM_INT);
 		$STH->execute();
 		$post = $STH->fetchObject('Core_Post');
 		return $post;
@@ -43,6 +43,29 @@ class Model_Post extends Core_Model
 		$DBH = Core_DbConnection::getInstance();
 		$postsNum = $DBH->query('SELECT COUNT(*) FROM post')->fetch(PDO::FETCH_NUM);
 		return $postsNum[0];
+	}
+	
+	public function validate (Core_Post $post)
+	{
+		$error = array();
+		
+		if (empty($post->title)){
+			$error[] = "Заголовок не должен быть пустым";
+		}
+		
+		if (empty($post->content)){
+			$error[] = "Пост не должен быть пустым";
+		}
+		
+		return $error;
+	}
+	
+	public function bumpThread ($id,$time){
+		$DBH = Core_DbConnection::getInstance();
+		$STH = $DBH->prepare("UPDATE post SET bumped = :bumped WHERE id = :id");
+		$STH->bindValue(':bumped', $time, PDO::PARAM_INT);
+		$STH->bindValue(':id', $id, PDO::PARAM_INT);
+		$STH->execute();
 	}
 	
 }
