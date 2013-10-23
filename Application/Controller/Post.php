@@ -2,7 +2,7 @@
 class Controller_Post extends Core_Controller
 {
 	
-	private $error = array();
+	private $error;
 	
 	public function actionCreate ()
 	{
@@ -14,9 +14,9 @@ class Controller_Post extends Core_Controller
 			
 			$post->title = trim($_POST['title']);
 			$post->content = trim($_POST['content']);
-			$post->createTime=time();
-			
-			$this->validate($post);
+			$post->createTime=$post->bumped=time();
+			$post->name = (!empty($_POST['name']))? trim($_POST['name']) : Config::getDefaultName();
+			$this->error = $this->model->validate($post);
 			if (empty($this->error)){
 				$this->model->createPost($post);
 				header('Location: ../');
@@ -27,14 +27,5 @@ class Controller_Post extends Core_Controller
 		$this->view->render('View_PostCreate.php','View_Template.php');
 	}
 	
-	private function validate (Core_Post $post)
-	{
-		if (empty($post->title)){
-			$this->error[] = "Заголовок не должен быть пустым";
-		}
-		
-		if (empty($post->content)){
-			$this->error[] = "Пост не должен быть пустым";
-		}
-	}
+	
 }
