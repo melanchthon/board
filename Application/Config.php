@@ -6,10 +6,10 @@ class Config
 	private static $dbHost = 'localhost';
 	private static $dbUser = 'root';
 	private static $dbPass = 'pass@word1';
-	private static $postsPerPage = 5;
+	private static $postsPerPage = 2;
 	private static $commentsOnMainPage = 3;
 	private static $profilerEnabled = true;
-	
+	private static $defaultName = 'Anonymous';
 		
 	public static function getDbConfig()
 	{
@@ -36,4 +36,10 @@ class Config
 	{
 		return self::$profilerEnabled;
 	}
+	
+	public static function getDefaultName()
+	{
+		return self::$defaultName;
+	}
+	
 }
