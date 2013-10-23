@@ -1,1 +1,1 @@
-<?phpclass Core_Comment{	public $content;	public $createTime;	public $postId;}
+<?phpclass Core_Comment{	public $content;	public $createTime;	public $postId;	public $name;}
