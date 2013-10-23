@@ -36,7 +36,11 @@
 			- скобки в for и if/else ставятся так:</textarea>
         </div>
 
-        
+        <div class="row">            
+            <label class="row-label" for="add-name">Ваше имя:</label>
+            <input type="text" name="name" id="add-name" class="input-wide">
+            <div class="row-hint">не обязательно</div>
+		</div>
 
        <div class="row row-buttons">
             <button class="button-action button-main">Создать тред</button>
