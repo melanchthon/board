@@ -2,6 +2,8 @@
 class Core_PDO extends PDO
 {
 	
+	public $profiler;
+	
 	public function __construct($dsn,$username=null,$password=null,$driverOptions=array())
 	{
 		parent::__construct($dsn,$username,$password,$driverOptions);
@@ -9,13 +11,19 @@ class Core_PDO extends PDO
 		
 	}
 	
+	public function setProfiler($profiler)
+	{
+		$this->profiler = $profiler; 
+	}
+	
 	public function query($str)
 	{
-		Core_Profiler::setStart();
+		$start = microtime(true);//время начала запроса к бд
 		$result = parent::query($str);
-		Core_Profiler::setEnd();
-		Core_Profiler::setQuery($str);
-		Core_Profiler::setRows($result->rowCount());
+		$end = microtime(true);//время конца запроса
+		$query = $str;//строка запроса
+		$rows = $result->rowCount();//количество строк, затронутых запросом
+		$this->profiler->addQuery($start,$end,$query,$rows);
 		return $result;
 	}
 }
