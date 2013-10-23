@@ -5,7 +5,7 @@
    <form method='post' action="../post/create" class="b-add-thread-form b-big-form">
         <div class="row">
             <label class="row-label" for="add-title">Заголовок:</label>
-            <input type="text"  name="title" id="add-title" class="input-wide" value="Проблема с PHP">
+            <input type="text"  name="title" id="add-title" class="input-wide">
             <div class="row-hint">не обязательно</div>
         </div>
 	
