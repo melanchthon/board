@@ -56,7 +56,7 @@
                </div>
 			     <button class="button-action button-main">Добавить комментарий</button>
            </form>         
-                <a href="../" class="button-left back-link">← вернуться на главную</a>
+                <a href="<?=Config::getBasePath()?>" class="button-left back-link">← вернуться на главную</a>
             </div>
         </div>
     </div>
