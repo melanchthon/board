@@ -18,6 +18,10 @@ class Controller_Main extends Core_Controller
 		$firstPost = $currentPage*$postsPerPage;
 		
 		$posts = $this->post->getPagePosts($firstPost, $postsPerPage);
+		if(empty($posts)){
+			$this->getBlankPage();
+			die;
+		}
 		$comments = $this->comment->getPageComments($posts); //получаю массив всех комментариев для текущей страницы
 		$this->view->render('View_Main.php', 'View_Template.php',array(
 		'posts'=>$posts,
@@ -25,6 +29,7 @@ class Controller_Main extends Core_Controller
 		'pagesCount'=>$pagesCount,
 		'currentPage'=>$currentPage,
 		));
+		
 	}
 	
 	private function getCurrentPage()
@@ -34,6 +39,11 @@ class Controller_Main extends Core_Controller
 		} else {
 			return 0;
 		}
+	}
+	
+	private function getblankPage()
+	{
+		$this->view->render('View_Blank.php', 'View_Template.php');
 	}
 	
 }
