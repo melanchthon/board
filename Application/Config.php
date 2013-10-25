@@ -8,8 +8,9 @@ class Config
 	private static $dbPass = 'pass@word1';
 	private static $postsPerPage = 2;
 	private static $commentsOnMainPage = 3;
-	private static $profilerEnabled = true;
+	private static $profilerEnabled = false;
 	private static $defaultName = 'Anonymous';
+	
 		
 	public static function getDbConfig()
 	{
@@ -22,6 +23,18 @@ class Config
 		return $arr;
 	}
 
+
+	
+	
+	public static function getBasePath ()
+	{
+		
+		$path = pathinfo('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);
+		$p = $path['dirname'];
+		return $p;
+		
+	}
+	
 	public static function getPostsPerPage ()
 	{
 		return self::$postsPerPage;
