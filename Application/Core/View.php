@@ -6,11 +6,6 @@ class Core_View
         if(is_array($data)) {  
             extract($data);
         }
-
-		foreach($params as $key=>$value){
-			$_GET[$key] = $value;
-		}
-		
         include ('Application/View/'.$template_view);
     }
 	
