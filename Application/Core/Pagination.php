@@ -14,9 +14,13 @@ class Core_Pagination
 	
 	public function generate()
 	{
+		if($this->pagesCount <= 1){
+			exit;
+		}
+		
 		$this->view->renderPartial('View_Pagination.php',array(
 		'pagesCount'=>$this->pagesCount,
-	    'currentPage'=>$this->currentPage,
+		'currentPage'=>$this->currentPage,
 		)
 		);
 	}
