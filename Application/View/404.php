@@ -1,0 +1,1 @@
+<!doctype html><html lang="en"><head>    <meta charset="UTF-8">    <title>Программирование// 404</title>    <link rel="stylesheet" href="<?=Config::getBasePath()?>/css/board-style.css"/></head><body>	<h1>404</h1>	<p>Page not found</p>	 <a href="<?=Config::getBasePath()?>" class="button-left back-link">Вернутся на главную</a></body></html>
