@@ -15,7 +15,7 @@ class Controller_Post extends Core_Controller
 			$post->title = trim($_POST['title']);
 			$post->content = trim($_POST['content']);
 			$post->createTime=$post->bumped=time();
-			$post->name = (!empty($_POST['name']))? trim($_POST['name']) : Config::getDefaultName();
+			$post->name =trim($_POST['name']);
 			$this->error = $this->model->validate($post);
 			if (empty($this->error)){
 				$this->model->createPost($post);
