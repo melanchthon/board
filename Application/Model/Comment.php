@@ -16,7 +16,7 @@ class Model_Comment extends Core_Model
 	public function getThreadComments ($thread)
 	{
 		$DBH  = Core_DbConnection::getInstance();
-		$STH = $DBH->prepare("SELECT  * FROM comment WHERE post_id= :thread");
+		$STH = $DBH->prepare("SELECT  * FROM comment WHERE post_id= :thread ORDER BY create_time ASC ");
 		$STH->bindValue(':thread', $thread);
 		$STH->execute();
 		$comments = $STH->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Core_Comment');
@@ -29,7 +29,7 @@ class Model_Comment extends Core_Model
 		$postsIds = $this->getPostsIds($posts);//id постов на текущей странице
 		$DBH = Core_DbConnection::getInstance();
 		$placeholder = implode(',',array_fill(0, count($postsIds), '?')); 
-		$STH = $DBH->prepare("SELECT  * FROM comment WHERE post_id IN ($placeholder)");
+		$STH = $DBH->prepare("SELECT  * FROM comment WHERE post_id IN ($placeholder) GROUP BY create_time DESC");
 		foreach($postsIds as $key=>$value){
 			$STH->bindValue(($key+1),$value);
 		}
