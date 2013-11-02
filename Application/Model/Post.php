@@ -7,11 +7,7 @@ class Model_Post extends Core_Model
 	{
 		$DBH = Core_DbConnection::getInstance();
 		//получаю все записи на странице и количество комментариев к ним:
-		$STH = $DBH->prepare("SELECT post.*,COUNT(comment.id)
-							AS total 
-							FROM post 
-							LEFT JOIN comment ON (post.id = comment.post_id) 
-							GROUP BY post.id 
+		$STH = $DBH->prepare("SELECT * FROM post 
 							ORDER BY bumped DESC 
 							LIMIT :firstPost, :postsPerPage");
 		$STH->bindValue(":firstPost", $firstPost, PDO::PARAM_INT);
@@ -64,6 +60,9 @@ class Model_Post extends Core_Model
 		$DBH = Core_DbConnection::getInstance();
 		$STH = $DBH->prepare("UPDATE post SET bumped = :bumped WHERE id = :id");
 		$STH->bindValue(':bumped', $time, PDO::PARAM_INT);
+		$STH->bindValue(':id', $id, PDO::PARAM_INT);
+		$STH->execute();
+		$STH = $DBH->prepare("UPDATE post SET c_number = c_number+1 WHERE id = :id");
 		$STH->bindValue(':id', $id, PDO::PARAM_INT);
 		$STH->execute();
 	}
