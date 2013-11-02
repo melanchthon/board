@@ -12,7 +12,7 @@ class Controller_Main extends Core_Controller
 		$this->comment = new Model_Comment();
 		$postsCount = $this->post->getPostsCount();
 		$postsPerPage = Config::getPostsPerPage();
-		$pagesCount = $postsCount/$postsPerPage;//количество постов на странице
+		$pagesCount = ceil($postsCount/$postsPerPage);//количество постов на странице
 		$currentPage = $this->getCurrentPage();//номер текущей страницы
 		
 		$firstPost = $currentPage*$postsPerPage;
