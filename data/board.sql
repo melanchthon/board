@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Час створення: Жов 26 2013 р., 01:09
+-- Час створення: Лис 04 2013 р., 00:55
 -- Версія сервера: 5.1.65-community
 -- Версія PHP: 5.4.6
 
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `post_id` int(11) NOT NULL,
-  `create_time` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
   `content` text NOT NULL,
   `name` varchar(128) NOT NULL DEFAULT 'anonymous',
   PRIMARY KEY (`id`),
-  KEY `post_id` (`post_id`)
+  KEY `p_id` (`post_id`,`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -44,11 +44,12 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
 CREATE TABLE IF NOT EXISTS `post` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `create_time` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
   `title` varchar(128) NOT NULL,
   `content` text NOT NULL,
-  `bumped` int(11) NOT NULL,
+  `bumped` datetime NOT NULL,
   `name` varchar(128) NOT NULL DEFAULT 'Anonymous',
+  `c_number` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
