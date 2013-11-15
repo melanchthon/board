@@ -59,7 +59,7 @@ class Model_Post extends Core_Model
 	public function bumpThread ($id,$time){
 		$DBH = Core_DbConnection::getInstance();
 		$STH = $DBH->prepare("UPDATE post SET bumped = :bumped WHERE id = :id");
-		$STH->bindValue(':bumped', $time, PDO::PARAM_INT);
+		$STH->bindValue(':bumped', $time);
 		$STH->bindValue(':id', $id, PDO::PARAM_INT);
 		$STH->execute();
 		$STH = $DBH->prepare("UPDATE post SET c_number = c_number+1 WHERE id = :id");
