@@ -2,7 +2,7 @@
 class Model_Comment extends Core_Model
 {
 	
-	private $error;
+	
 	
 	
 	public function createComment (Core_Comment $comment)
@@ -16,7 +16,7 @@ class Model_Comment extends Core_Model
 	public function getThreadComments ($thread)
 	{
 		$DBH  = Core_DbConnection::getInstance();
-		$STH = $DBH->prepare("SELECT  * FROM comment WHERE post_id= :thread ORDER BY create_time ASC ");
+		$STH = $DBH->prepare("SELECT  * FROM comment WHERE post_id= :thread ORDER BY create_time DESC ");
 		$STH->bindValue(':thread', $thread);
 		$STH->execute();
 		$comments = $STH->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Core_Comment');
