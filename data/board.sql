@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.0
+-- version 4.0.9
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Час створення: Лис 04 2013 р., 00:55
--- Версія сервера: 5.1.65-community
+-- Час створення: Лис 16 2013 р., 02:24
+-- Версія сервера: 5.5.34
 -- Версія PHP: 5.4.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -53,15 +53,21 @@ CREATE TABLE IF NOT EXISTS `post` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Обмеження зовнішнього ключа збережених таблиць
---
+-- --------------------------------------------------------
 
 --
--- Обмеження зовнішнього ключа таблиці `comment`
+-- Структура таблиці `user`
 --
-ALTER TABLE `comment`
-  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`);
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `pass` varchar(128) NOT NULL,
+  `salt` varchar(128) NOT NULL,
+  `role` int(11) DEFAULT '0',
+  `token` varchar(128) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
