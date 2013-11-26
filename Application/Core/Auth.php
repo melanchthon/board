@@ -1,20 +1,19 @@
 <?php
 class Core_Auth 
 {
-	/*public $userName;
-	
-	private function __construct($name)
-	{
-		$this->userName = $name;
-	}*/
-
-	
-	public function login($user,$remember = false)
+//this class works with cookie and session variables during authentication/authorization
+	public function login($user,$remember = null)
 	{
 		$_SESSION['name'] = $user->name;
-		if ($remember == true){
-			setcookie('name',$user->name,time()+7*24*60*60,'/');
-			setcookie('token',$user->token,time()+7*24*60*60,'/');
+		
+		//if "remember me" button was cheked by the user set authorization cookies, else
+		//set cookies, which will be destroyed after browser closing	
+		if ($remember == 'on'){
+			setcookie('name',$user->name,time()+7*24*60*60,'/',NULL,NULL,TRUE);
+			setcookie('token',$user->token,time()+7*24*60*60,'/',NULL,NULL,TRUE);
+		} else {
+			setcookie('name',$user->name,NULL,'/',NULL,NULL,TRUE);
+			setcookie('token',$user->token,NULL,'/',NULL,NULL,TRUE);
 		}
 	}
 	
@@ -28,9 +27,10 @@ class Core_Auth
 	
 	public function isLogged()
 	{
+		//chek if user is logged
 		if (isset($_SESSION['name'])){
 			return true;
-		} else if (isset ($_COOKIE['name']) || isset($_COOKIE['token'])) {
+		} else if (isset ($_COOKIE['name']) && isset($_COOKIE['token'])) {
 			$this->cookiesAuth();
 			return true;
 		} else {
@@ -41,6 +41,8 @@ class Core_Auth
 	
 	private function cookiesAuth()
 	{
+		//authentication with cookies; if cookies are set and data matches to the stored in database, 
+		//authenticate user, else return false
 		$model = new Model_User();
 		$name = $_COOKIE['name'];
 		$token = $_COOKIE['token'];
@@ -53,9 +55,9 @@ class Core_Auth
 	
 	public function getName()
 	{
-		if (isset($_SESSION['name'])){
+		if ($this->isLogged()){
 			return $_SESSION['name'];
 		}
-		return Config::getDefaultName();
+		return null;
 	}
 }
