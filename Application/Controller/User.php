@@ -14,11 +14,12 @@ class Controller_User extends Core_Controller
 			$this->getPost($user);
 			$error = $this->model->validate($user);
 			if (empty($error)){
-				$userData = $this->model->createUser($user);
+				$userData = $this->model->createUser($user);//get $user oject, if creation was succes
 				$authManager = new Core_Auth();
-				$authManager->login($userData,$user->remember);
+				$authManager->login($userData,$user->remember);//login user
 				header("Location:".Config::getbasePath().'/user/succes');
 			} else {	
+				//if user creation was failed, display creation form with error messages 
 				$this->view->render('View_UserCreate.php','View_Template.php', array('error'=>$error,
 																					'name'=>$user->name,
 																					'pass'=>$user->pass));																
@@ -38,7 +39,7 @@ class Controller_User extends Core_Controller
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$this->getPost($user);
-			$userData = $this->model->authenticate($user);//get $user oject if authentication is succes
+			$userData = $this->model->authenticate($user);//get $user oject, if authentication is succes
 			if ($userData){
 				$authManager = new Core_Auth();
 				$authManager->login($userData,$user->remember);
