@@ -6,11 +6,12 @@ class Config
 	private static $dbHost = 'localhost';
 	private static $dbUser = 'root';
 	private static $dbPass = 'pass@word1';
-	private static $postsPerPage = 2;
+	private static $postsPerPage = 10;
 	private static $commentsOnMainPage = 3;
-	private static $profilerEnabled = false;
+	private static $profilerEnabled = true;
 	private static $defaultName = 'Anonymous';
-	
+	private static $reservedLogins = array('admin','moderator','anonymous',
+	'админ','модератор');
 		
 	public static function getDbConfig()
 	{
@@ -53,6 +54,11 @@ class Config
 	public static function getDefaultName()
 	{
 		return self::$defaultName;
+	}
+	
+	public static function getReservedLogins()
+	{
+		return self::$reservedLogins;
 	}
 	
 }
