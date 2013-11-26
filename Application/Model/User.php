@@ -10,28 +10,44 @@ class Model_User extends Core_Model
 		$user->salt = $this->generateString();
 		$user->pass = $this->generateHash($user->salt,$user->pass);
 		$user->token = $this->generateString();
-		$STH = $DBH->prepare("INSERT INTO user(name, pass, salt, token) 
-							  VALUES (:name, :pass, :salt, :token)");
-		//$STH->execute((array)$user);
-		$STH->bindValue(":name",$user->name);
-		$STH->bindValue(":pass",$user->pass);
-		$STH->bindValue(":salt",$user->salt);
-		$STH->bindValue(":token",$user->token);
-		$STH->execute();
+		$user->ip = $_SERVER['REMOTE_ADDR'];
+		$STH = $DBH->prepare("INSERT INTO user(name, pass, salt, token, ip) 
+							  VALUES (:name, :pass, :salt, :token, :ip)");
+		$STH->execute(array(
+		':name'=>$user->name,
+		':pass'=>$user->pass,
+		':salt'=>$user->salt,
+		':token'=>$user->token,
+		':ip'=>$user->ip,));
+		return $user;
 	}
 	
 	public function authenticate(Core_User $user)
 	{
 		
-		$userData = $this->userExists($user->name);
+		$captcha = new Core_Captcha();
+		
+		$userData = $this->getUserIfExists($user->name); //chek if user with same name exists;
 		if(!$userData){
 			$this->error[] = "Нет пользователя с таким именем";
 			return false;
+			
 		}
-		
-		
+
 		if(!$this->checkPass($user->pass,$userData->pass,$userData->salt)){
 			$this->error[] ="Неверный пароль";
+			return false;
+		}
+		
+		//if captcha is required validate captcha string
+		if($captcha->isCaptchaRequired() && !$captcha->chekCaptcha($user->captcha)){
+			$this->error[] = 'Неверный код подтверждения.';
+			return false;
+		}
+		
+		//if honeypot field is no empty, return error
+		if (!empty($user->honeypot)){
+			$error[] = 'Извините, произошла ошибка, попробуйте заполнить форму ёще раз.';
 			return false;
 		}
 		
@@ -40,11 +56,12 @@ class Model_User extends Core_Model
 	
 	public function cookiesAuth($name,$token)
 	{
-		$userData = $this->userExists($name);
+		//if there are authorization cookies,validate them. 
+		$userData = $this->getUserIfExists($name);//chek, if user with same name exists;
 		if(!$userData){
 			return false;
 		}
-		
+		//chek unique token for this user
 		if(!$this->checkToken($userData->token,$token)){
 			return false;
 		}
@@ -71,8 +88,10 @@ class Model_User extends Core_Model
 		return $hash;
 	}
 	
-	public function userExists($name)
+	public function getUserIfExists($name)
 	{
+		//get user name and chek if user with the same name exists.
+		//if exists return this user information, else return false
 		$DBH = Core_DbConnection::getInstance();
 		$STH = $DBH->prepare('SELECT * FROM user WHERE name = :name');
 		$STH->bindValue(':name',$name);
@@ -103,23 +122,44 @@ class Model_User extends Core_Model
 	public function validate (Core_User $user)
 	{	
 		$error = array();
+		$csrf = new Core_CSRF();
+		$captcha = new Core_Captcha();
 		
-		if (strlen($user->name)<5){
-			$error[] = "Логин не может быть меньше 5 символов";
+		if (mb_strlen($user->name)>25){
+			$error[] = "Логин не может быть длиннее 25 символов";
 		}
 		
-		if ($this->userExists($user->name)){
+		if ($this->getUserIfExists(mb_strtolower($user->name)) || $this->checkIfReserved(mb_strtolower($user->name))){
 			$error[] = "Логин уже занят";
 		}
 		
 		if (strlen($user->pass)<8){
 			$error[] = 'Пароль не должен быть меньше 8 символов';
 		}
-		if (!preg_match('/[0-9]/',$user->pass)){
-			$error[] = "Пароль должен содержать буквы и цифры";
-		}
 
+		if (!$csrf->chekToken($user->csrf)){
+			$error[] = 'Извините, произошла ошибка, попробуйте заполнить форму ёще раз.';
+		}
+		
+		if($captcha->isCaptchaRequired() && !$captcha->chekCaptcha($user->captcha)){
+			$error[] = 'Неверный код подтверждения.';
+		}
+		
+		//if honeypot field is no empty, return error
+		if (!empty($user->honeypot)){
+			$error[] = 'Извините, произошла ошибка, попробуйте заполнить форму ёще раз.';
+		}
+		
 		return $error;
+	}
+	
+	private function checkIfReserved($name)
+	{
+		//chek if user login isn't one of reserved names
+		$reservedLogins = Config::getReservedLogins();
+		$isReserved = in_array($name,$reservedLogins );
+		return $isReserved;
+		
 	}
 	
 	public function getErrors()
