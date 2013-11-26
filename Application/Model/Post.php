@@ -20,8 +20,14 @@ class Model_Post extends Core_Model
 	public function createPost (Core_Post $post)
 	{
 		$DBH = Core_DbConnection::getInstance();
-		$STH = $DBH->prepare("INSERT INTO post(create_time, title, content, bumped, name) VALUES (:createTime, :title, :content, :bumped, :name)");
-		$STH->execute((array)$post);
+		$STH = $DBH->prepare("INSERT INTO post(create_time, title, content, bumped, name) 
+								VALUES (:createTime, :title, :content, :bumped, :name)");
+		$STH->execute(array(
+		':createTime'=>$post->createTime,
+		':title'=>$post->title,
+		':content'=>$post->content,
+		':bumped'=>$post->bumped,
+		':name'=>$post->name,));
 	}
 	
 	public function getThreadPost($thread)
@@ -44,6 +50,8 @@ class Model_Post extends Core_Model
 	public function validate (Core_Post $post)
 	{
 		$error = array();
+		$csrf = new Core_CSRF();
+		$captcha = new Core_Captcha();
 		
 		if (empty($post->title)){
 			$error[] = "Заголовок не должен быть пустым";
@@ -51,6 +59,20 @@ class Model_Post extends Core_Model
 		
 		if (empty($post->content)){
 			$error[] = "Пост не должен быть пустым";
+		}
+		//chek if isset csrf-token
+		if (!$csrf->chekToken($post->csrf)){
+			$error[] = 'Извините, произошла ошибка, попробуйте заполнить форму ёще раз.';
+
+		}
+		//if captcha is required validate captcha string
+		if($captcha->isCaptchaRequired() && !$captcha->chekCaptcha($post->captcha)){
+			$error[] = 'Неверный код подтверждения.';
+		}
+		
+		//if honeypot field is no empty, return error
+		if (!empty($post->honeypot)){
+			$error[] = 'Извините, произошла ошибка, попробуйте заполнить форму ёще раз.';
 		}
 		
 		return $error;
