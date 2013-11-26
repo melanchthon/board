@@ -11,7 +11,7 @@
 		<div class="b-thread">
 			<div class="b-post first-post">
 				
-				<h2 class="thread-topic">Регистрация прошла успешно, можете <a href="<?=Config::getBasePath()?>/user/login">зайти на сайт</a> под своим именем.</h2>
+				<h2 class="thread-topic">Приветствуем, <?=$this->h($auth->getName());?>. Регистрация прошла успешно, можете <a href="<?=Config::getBasePath()?>">зайти на сайт</a> под своим именем.</h2>
 				
 			</div> 
 		</div>
